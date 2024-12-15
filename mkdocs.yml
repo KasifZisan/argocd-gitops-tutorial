@@ -1,6 +1,7 @@
 site_name: ArgoCD and GitOps
 nav:
   - ArgoCD: index.md
+  - ArgoCD Install: argocd.md
 theme:
   name: material
   nav_style: dark
