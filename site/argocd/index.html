@@ -224,6 +224,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ArgoCD Install
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -233,6 +244,39 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#steps-11-install-argocd-on-ubuntu" class="md-nav__link">
+    Steps 1.1: Install ArgoCD on Ubuntu
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps-12-access-argocd-cli" class="md-nav__link">
+    Steps 1.2: Access ArgoCD CLI
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -258,6 +302,28 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#steps-11-install-argocd-on-ubuntu" class="md-nav__link">
+    Steps 1.1: Install ArgoCD on Ubuntu
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps-12-access-argocd-cli" class="md-nav__link">
+    Steps 1.2: Access ArgoCD CLI
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -272,10 +338,35 @@
 
 
 <h1 id="install-argo-cd">Install Argo CD</h1>
-<pre><code class="language-bash">kubectl create namespace argocd
+<p>ArgoCD needs to be installed on your Kubernetes cluster to manage the GitOps workflow. Follow these steps to install it:</p>
+<h2 id="steps-11-install-argocd-on-ubuntu">Steps 1.1: Install ArgoCD on Ubuntu</h2>
+<p>Run the following commands to install ArgoCD CLI:</p>
+<pre><code class="language-bash"># Retrieve the version of the current release
+ARGOCD_VERSION=$(curl --silent &quot;https://api.github.com/repos/argoproj/argo-cd/releases/latest&quot; | grep '&quot;tag_name&quot;' | sed -E 's/.*&quot;([^&quot;]+)&quot;.*/\1/')
+
+# Retrieve the binary from GitHub to a temporary location
+curl -sSL -o /tmp/argocd-${ARGOCD_VERSION} https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64
+
+# Make the binary executable and move it to a location within $PATH /usr/local/bin
+chmod +x /tmp/argocd-${VERSION}
+sudo mv /tmp/argocd-${VERSION} /usr/local/bin/argocd 
+
+# Verify installation
+argocd version --client
+</code></pre>
+<p>Run the following command to install ArgoCD:</p>
+<pre><code class="language-bash"># ArgoCD Installation
+kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 </code></pre>
-<p>This will create a new namespace, argocd, where Argo CD services and application resources will live.</p>
+<h2 id="steps-12-access-argocd-cli">Steps 1.2: Access ArgoCD CLI</h2>
+<p>Expose the ArgoCD server</p>
+<pre><code class="language-bash">kubectl port-forward svc/argocd-server -n argocd 8080:443
+</code></pre>
+<p>Get the username and password</p>
+<pre><code class="language-bash">kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+</code></pre>
+<p>Open the browser and go to <code>http://localhost:8080</code>. Use <code>admin</code> as the username and use the password that you got from the last command</p>
 
 
 

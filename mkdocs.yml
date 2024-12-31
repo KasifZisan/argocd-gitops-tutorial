@@ -1,4 +1,4 @@
-site_name: ArgoCD and GitOps
+site_name: ArgoCD
 nav:
   - ArgoCD: index.md
   - ArgoCD Install: argocd.md
