@@ -10,6 +10,8 @@
       
       
       
+        <link rel="next" href="argocd/">
+      
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.0">
@@ -65,6 +67,11 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
+      
+        
+        <a href="#argocd" class="md-skip">
+          Skip to content
+        </a>
       
     </div>
     <div data-md-component="announce">
@@ -195,6 +202,19 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ArgoCD
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
       
       <a href="." class="md-nav__link md-nav__link--active">
         
@@ -206,6 +226,58 @@
 
       </a>
       
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#argocd-components" class="md-nav__link">
+    ArgoCD Components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argocd-applicaiton-lifestyle" class="md-nav__link">
+    ArgoCD Applicaiton Lifestyle
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="argocd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ArgoCD Install
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -227,6 +299,30 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#argocd-components" class="md-nav__link">
+    ArgoCD Components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#argocd-applicaiton-lifestyle" class="md-nav__link">
+    ArgoCD Applicaiton Lifestyle
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -241,9 +337,50 @@
                   
 
 
-  <h1>ArgoCD</h1>
-
-
+<h1 id="argocd">ArgoCD</h1>
+<p>ArgoCD is a tool created by Intuit, that is focused on deploying and managing workloads on Kubernetes. Intuit believe configuration/definition/deployment data for apps and environments should be declarative</p>
+<h2 id="argocd-components">ArgoCD Components</h2>
+<ul>
+<li>Kubernetes Cluster</li>
+<li>ArgoCD Service/Application</li>
+<li>Git Repository</li>
+<li>Webhooks</li>
+</ul>
+<h2 id="argocd-applicaiton-lifestyle">ArgoCD Applicaiton Lifestyle</h2>
+<ul>
+<li>The output of CI should be deployable k8s config stored in a git repo</li>
+<li>k8s config defines an ArgoCD Application custom resource definition</li>
+<li>When this config is added to the git repo, ArgoCD receives a webhook request</li>
+<li>ArgoCD synchronizes with the git repo<ul>
+<li>A git pull</li>
+<li>Compares what should be running with what is running</li>
+<li>(Re-)Deploys updated applications</li>
+</ul>
+</li>
+<li>ArgoCD supports pre and post sync hooks<ul>
+<li>Helm chart hooks don't work</li>
+<li>ArgoCD is essentially doing <code>helm template | kubectl -f -</code></li>
+</ul>
+</li>
+<li>Any changes in the k8s config will cause an application to re-deploy<ul>
+<li>Things you want to cause a re-deploy: docker image tag, helm chart version number</li>
+<li>Things you may not want: dates, timestamps, any random string</li>
+</ul>
+</li>
+<li>Undeploy by removing the application from the git repo or it can be configured</li>
+<li>The git repo is the source of truth for how things should be deployed</li>
+<li>The ArgoCD UI (or metrics) is the source of trught for any deployment state</li>
+<li>The ArgoCD Application CR can point to another Application CI and so on</li>
+<li>ArgoCD can be configured to access other Kubernetes clusters<ul>
+<li>Application belong to a project, a project can target an external k8s cluster</li>
+</ul>
+</li>
+<li>Supports custom deployment methods<ul>
+<li>Blue/Green, Canary</li>
+<li>ArgoRollouts</li>
+</ul>
+</li>
+</ul>
 
 
 
